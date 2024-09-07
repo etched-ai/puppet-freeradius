@@ -35,7 +35,7 @@ class freeradius (
   # Guess if we are running FreeRADIUS 3.1.x
   if (
     ($package_ensure =~ /^3\.1\./) or
-    ($facts['freeradius_version'] and $facts['freeradius_version'] =~ /^3\.1\./)
+    ($facts.dig('freeradius','version','minor') == '3.1')
   ) {
     $fr_3_1 = true
   } else {

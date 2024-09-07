@@ -50,7 +50,7 @@ define freeradius::sql (
       warning(@("WARN"/L)
         The `pool_connect_timeout` parameter requires FreeRADIUS 3.1.x, \
         i.e. the experimental branch. You are running \
-        `${facts['freeradius_version']}`. In the future, attempting to set \
+        `${facts['freeradius']['version']['full']}`. In the future, attempting to set \
         it on this version may fail.
         |-WARN
       )
@@ -65,7 +65,7 @@ define freeradius::sql (
       fail(@("FAIL"/L)
         The `pool_connect_timeout` parameter requires FreeRADIUS 3.1.x, \
         i.e. the experimental branch. You are running \
-        `${facts['freeradius_version']}`.
+        `${facts['freeradius']['version']['full']}`.
         |-FAIL
       )
     }

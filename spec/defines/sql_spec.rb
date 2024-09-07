@@ -7,7 +7,13 @@ describe 'freeradius::sql' do
 
       let(:facts) do
         os_facts.merge(
-          freeradius_version: '3.0.21',
+          freeradius: {
+            version: {
+              full: '3.0.21',
+              minor: '3.0',
+              major: '3',
+            }
+          }
         )
       end
 
@@ -89,7 +95,13 @@ describe 'freeradius::sql' do
       context 'when freeradius::fr_3_1 is true' do
         let(:facts) do
           super().merge(
-            'freeradius_version' => '3.1.1',
+            'freeradius' => {
+              'version' => {
+                'full' => '3.1.1',
+                'minor' => '3.1',
+                'major' => '3',
+              }
+            }
           )
         end
 

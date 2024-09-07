@@ -68,15 +68,17 @@ define freeradius::module::ldap (
   $fr_modulepath       = $::freeradius::params::fr_modulepath
   $fr_basepath         = $::freeradius::params::fr_basepath
   $fr_group            = $::freeradius::params::fr_group
+  $version_full        = $facts.dig('freeradius','version','full')
+  $version_minor       = $facts.dig('freeradius','version','minor')
 
   # Validate our inputs
   # FR3.0 format server = 'ldap1.example.com, ldap1.example.com, ldap1.example.com'
   # FR3.1 format server = 'ldap1.example.com'
   #              server = 'ldap2.example.com'
   #              server = 'ldap3.example.com'
-  $serverconcatarray = $::freeradius_version ? {
-    /^3\.0\./ => any2array(join($server, ',')),
-    default   => $server,
+  $serverconcatarray = $version_minor ? {
+    '3.0'   => any2array(join($server, ',')),
+    default => $server,
   }
 
   # Warn if the user tries to set a FreeRADIUS 3.1.x specific parameter, and
@@ -89,7 +91,7 @@ define freeradius::module::ldap (
     if $connect_timeout != undef {
       warning(@("WARN"/L)
         The `connect_timeout` parameter requires FreeRADIUS 3.1.x, i.e. the \
-        experimental branch. You are running `${facts['freeradius_version']}`. \
+        experimental branch. You are running `${version_full}`. \
         In the future, attempting to set it on this version may fail.
         |-WARN
       )
@@ -98,7 +100,7 @@ define freeradius::module::ldap (
     if $session_tracking != undef {
       warning(@("WARN"/L)
         The `session_tracking` parameter requires FreeRADIUS 3.1.x, i.e. the \
-        experimental branch. You are running `${facts['freeradius_version']}`. \
+        experimental branch. You are running `${version_full}`. \
         In the future, attempting to set it on this version may fail.
         |-WARN
       )
@@ -108,7 +110,7 @@ define freeradius::module::ldap (
       warning(@("WARN"/L)
         The `use_referral_credentials` parameter requires FreeRADIUS 3.1.x, \
         i.e. the experimental branch. You are running \
-        `${facts['freeradius_version']}`. In the future, attempting to set \
+        `${version_full}`. In the future, attempting to set \
         it on this version may fail.
         |-WARN
       )
@@ -129,7 +131,7 @@ define freeradius::module::ldap (
     if $connect_timeout != undef {
       fail(@("FAIL"/L)
         The `connect_timeout` parameter requires FreeRADIUS 3.1.x, i.e. the \
-        experimental branch. You are running `${facts['freeradius_version']}`.
+        experimental branch. You are running `${version_full}`.
         |-FAIL
       )
     }
@@ -137,7 +139,7 @@ define freeradius::module::ldap (
     if $session_tracking != undef {
       fail(@("FAIL"/L)
         The `session_tracking` parameter requires FreeRADIUS 3.1.x, i.e. the \
-        experimental branch. You are running `${facts['freeradius_version']}`.
+        experimental branch. You are running `${version_full}`.
         |-FAIL
       )
     }
@@ -146,7 +148,7 @@ define freeradius::module::ldap (
       fail(@("FAIL"/L)
         The `use_referral_credentials` parameter requires FreeRADIUS 3.1.x, \
         i.e. the experimental branch. You are running \
-        `${facts['freeradius_version']}`.
+        `${version_full}`.
         |-FAIL
       )
     }

@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'facter/freeradius_version'
+require 'facter/freeradius'
 
-describe 'freeradius_version', type: :fact do
+describe 'freeradius', type: :fact do
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }
@@ -17,8 +17,8 @@ describe 'freeradius_version', type: :fact do
           end
         end
 
-        orig_exec_method = Facter::Core::Execution.method(:exec)
-        allow(Facter::Core::Execution).to receive(:exec) do |cmd|
+        orig_exec_method = Facter::Core::Execution.method(:execute)
+        allow(Facter::Core::Execution).to receive(:execute) do |cmd|
           case cmd
           when %r{^(radiusd|freeradius) -v$}
             'FreeRADIUS Version 3.0.21'
@@ -28,12 +28,16 @@ describe 'freeradius_version', type: :fact do
         end
       end
 
-      it 'sets freeradius_version' do
-        expect(Facter.fact(:freeradius_version).value).to eq('3.0.21')
+      it 'sets freeradius.version.full' do
+        expect(Facter.fact(:freeradius)['version']['full'].value).to eq('3.0.21')
       end
 
-      it 'sets freeradius_maj_version' do
-        expect(Facter.fact(:freeradius_maj_version).value).to eq('3')
+      it 'sets freeradius.version.minor' do
+        expect(Facter.fact(:freeradius)['version']['minor'].value).to eq('3.0')
+      end
+
+      it 'sets freeradius.version.major' do
+        expect(Facter.fact(:freeradius)['version']['major'].value).to eq('3')
       end
     end
   end
